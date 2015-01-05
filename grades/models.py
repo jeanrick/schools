@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from polymorphic import PolymorphicModel
 
@@ -12,8 +14,9 @@ PARISH_CHOICES = ((parish, parish) for parish in PARISHES)
 
 ATTENDANCES = [
 	"Present",
+	"Late",
 	"Absent",
-	"Sick"
+	"Sick",
 ]
 ATTENDANCE_CHOICES = ((attendance, attendance) for attendance in ATTENDANCES)
 
@@ -26,13 +29,13 @@ class School(models.Model):
 
 class Person(PolymorphicModel):
 	pass
-	
+
 class Teacher(Person):
 	pass
-	
+
 class Student(Person):
 	pass
-	
+
 
 class Shift(models.Model):
 	name = models.CharField(max_length=140)
@@ -43,16 +46,20 @@ class Class(models.Model):
 	name = models.CharField(max_length=140)
 	shift = models.ForeignKey("Shift", null=True, blank=True)
 	teacher = models.ForeignKey("Teacher", related_name="classes")
-	students = models.ManyToMany("Student", related_name="classes")
+	students = models.ManyToManyField("Student", related_name="classes")
 
 class Subject(models.Model):
 	name = models.CharField(max_length=140)
-	level = models.InterferField()
+	level = models.IntegerField()
 
 class StudentGrade(models.Model):
+	assessment = models.ForeignKey('StudentAssessment', related_name='grades')
 	student = models.ForeignKey("Student")
 	score = models.IntegerField()
 	participation_status = models.CharField(max_length=10, choices=ATTENDANCE_CHOICES)
+	# submitted_at?
+	assigned_by = models.ForeignKey("Teacher")
+	assigned_at = models.DateTimeField()
 
 class StudentAssessment(models.Model):
 	ASSESSMENT_TYPES = [
@@ -61,7 +68,9 @@ class StudentAssessment(models.Model):
 		"Project",
 		"Test",
 	]
-	ASSESSMENT_CHOICES = ((assignment_type, assignment_type) for assignment_type in ASSIGNMENT_TYPES)
+	ASSESSMENT_CHOICES = ((assessment_type, assessment_type) for assessment_type in ASSESSMENT_TYPES)
 	subject = models.ForeignKey("Subject")
-	assessment_type = models.CharField(max_length=10, choices=ASSIGNMENT_CHOICES)
+	assessment_type = models.CharField(max_length=10, choices=ASSESSMENT_CHOICES)
 	max_score = models.IntegerField()
+	time_given = models.DateTimeField(default=datetime.now)
+	# time_due?
