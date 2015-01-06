@@ -36,10 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'polymorphic',
     'grades',
 )
+
+AUTH_USER_MODEL = 'grades.Person'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

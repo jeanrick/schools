@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from polymorphic import PolymorphicModel
 
 PARISHES = [
@@ -20,6 +21,16 @@ ATTENDANCES = [
 ]
 ATTENDANCE_CHOICES = ((attendance, attendance) for attendance in ATTENDANCES)
 
+class Address(models.Model):
+	line1 = models.CharField(max_length=140)
+	line2 = models.CharField(max_length=140, null=True, blank=True)
+	parish = models.CharField(max_length=20, choices=PARISH_CHOICES)
+
+	def __unicode__(self):
+		return u'{}, {}, {}'.format(self.line1, self.line2, self.parish)
+
+
+
 # school
 class School(models.Model):
 	name = models.CharField(max_length=140)
@@ -27,14 +38,16 @@ class School(models.Model):
 	address2 = models.CharField(max_length=140, null=True, blank=True)
 	parish = models.CharField(max_length=20, choices=PARISH_CHOICES)
 
-class Person(PolymorphicModel):
+
+class Person(AbstractUser):
+	address = models.ForeignKey('Address', null=True, blank=True)
+	# details ... this is probably a polymorphic model
+	# use Groups to determine if this person is a student etc
+
+class UserDetails(PolymorphicModel):
+	"""Extra data that we may need for a user"""
 	pass
 
-class Teacher(Person):
-	pass
-
-class Student(Person):
-	pass
 
 
 class Shift(models.Model):
@@ -45,21 +58,24 @@ class Class(models.Model):
 	school = models.ForeignKey("School", related_name="classes")
 	name = models.CharField(max_length=140)
 	shift = models.ForeignKey("Shift", null=True, blank=True)
-	teacher = models.ForeignKey("Teacher", related_name="classes")
-	students = models.ManyToManyField("Student", related_name="classes")
+	teacher = models.ForeignKey("Person", related_name="classes_taught")
+	students = models.ManyToManyField("Person", related_name="classes_attending")
+
 
 class Subject(models.Model):
 	name = models.CharField(max_length=140)
 	level = models.IntegerField()
 
+
 class StudentGrade(models.Model):
 	assessment = models.ForeignKey('StudentAssessment', related_name='grades')
-	student = models.ForeignKey("Student")
+	student = models.ForeignKey("Person", related_name='grades')
 	score = models.IntegerField()
 	participation_status = models.CharField(max_length=10, choices=ATTENDANCE_CHOICES)
 	# submitted_at?
-	assigned_by = models.ForeignKey("Teacher")
+	assigned_by = models.ForeignKey("Person", related_name='grades_assigned')
 	assigned_at = models.DateTimeField()
+
 
 class StudentAssessment(models.Model):
 	ASSESSMENT_TYPES = [
