@@ -21,6 +21,9 @@ ATTENDANCES = [
 ]
 ATTENDANCE_CHOICES = ((attendance, attendance) for attendance in ATTENDANCES)
 
+TEACHERS_GROUP = 'Teachers'
+STUDENTS_GROUP = 'Students'
+
 class Address(models.Model):
 	line1 = models.CharField(max_length=140)
 	line2 = models.CharField(max_length=140, null=True, blank=True)
@@ -38,11 +41,31 @@ class School(models.Model):
 	address2 = models.CharField(max_length=140, null=True, blank=True)
 	parish = models.CharField(max_length=20, choices=PARISH_CHOICES)
 
+	def __unicode__(self):
+		return u'{}'.format(self.name)
+
 
 class Person(AbstractUser):
+	TEACHER = 'Teacher'
+	STUDENT = 'Student'
+
+	# use Groups to determine if this person is a student etc
 	address = models.ForeignKey('Address', null=True, blank=True)
 	# details ... this is probably a polymorphic model
-	# use Groups to determine if this person is a student etc
+
+	def __unicode__(self):
+		user_type = 'Teacher' if self.is_teacher else 'Student'
+		return u'{} {} ({})'.format(self.first_name, self.last_name, user_type)
+
+	@property
+	def is_teacher(self):
+		return self.groups.filter(name=TEACHERS_GROUP).exists()
+
+	@property
+	def is_student(self):
+		return self.groups.filter(name=STUDENTS_GROUP).exists()
+
+
 
 class UserDetails(PolymorphicModel):
 	"""Extra data that we may need for a user"""
@@ -54,6 +77,8 @@ class Shift(models.Model):
 	name = models.CharField(max_length=140)
 	description = models.TextField(max_length=140, null=True, blank=True)
 
+
+
 class Class(models.Model):
 	school = models.ForeignKey("School", related_name="classes")
 	name = models.CharField(max_length=140)
@@ -62,9 +87,11 @@ class Class(models.Model):
 	students = models.ManyToManyField("Person", related_name="classes_attending")
 
 
+
 class Subject(models.Model):
 	name = models.CharField(max_length=140)
 	level = models.IntegerField()
+
 
 
 class StudentGrade(models.Model):
@@ -75,6 +102,7 @@ class StudentGrade(models.Model):
 	# submitted_at?
 	assigned_by = models.ForeignKey("Person", related_name='grades_assigned')
 	assigned_at = models.DateTimeField()
+
 
 
 class StudentAssessment(models.Model):
