@@ -1,15 +1,15 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from polymorphic import PolymorphicModel
 
 PARISHES = [
 	"Trelawny",
 	"Hanover",
-	"Westmoreland",
 	"Kingston",
 	"St. Andrew",
+	"Westmoreland",
 ]
 PARISH_CHOICES = ((parish, parish) for parish in PARISHES)
 
@@ -22,6 +22,8 @@ ATTENDANCES = [
 ATTENDANCE_CHOICES = ((attendance, attendance) for attendance in ATTENDANCES)
 
 TEACHERS_GROUP = 'Teachers'
+PRINCIPALS_GROUP = 'Principals'
+SENIOR_TEACHERS_GROUP = 'Senior Teachers'
 STUDENTS_GROUP = 'Students'
 
 class Address(models.Model):
@@ -37,21 +39,44 @@ class Address(models.Model):
 # school
 class School(models.Model):
 	name = models.CharField(max_length=140)
-	address1 = models.CharField(max_length=140, null=True, blank=True)
-	address2 = models.CharField(max_length=140, null=True, blank=True)
-	parish = models.CharField(max_length=20, choices=PARISH_CHOICES)
+	address = models.ForeignKey('Address', null=True, blank=True)
 
 	def __unicode__(self):
 		return u'{}'.format(self.name)
+
+	@property
+	def staff_members(self):
+		staff_groups = [
+			TEACHERS_GROUP,
+			SENIOR_TEACHERS_GROUP,
+			PRINCIPALS_GROUP,
+		]
+		return self.persons.filter(groups__in=Group.objects.filter(name__in=staff_groups))
+
+	@property
+	def number_of_staff_members(self):
+		return self.staff_members.count()
+
+	@property
+	def students(self):
+		return self.persons.filter(groups__in=Group.objects.filter(name=STUDENTS_GROUP))
+
+	@property
+	def number_of_students(self):
+		return self.students.count()
 
 
 class Person(AbstractUser):
 	TEACHER = 'Teacher'
 	STUDENT = 'Student'
 
+	class Meta:
+		verbose_name = 'person'
+
 	# use Groups to determine if this person is a student etc
 	address = models.ForeignKey('Address', null=True, blank=True)
-	# details ... this is probably a polymorphic model
+	# extra_details ... this is probably a polymorphic model
+	school = models.ForeignKey('School', null=True, blank=True, related_name='persons')
 
 	def __unicode__(self):
 		user_type = 'Teacher' if self.is_teacher else 'Student'
