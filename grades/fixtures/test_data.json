@@ -1,0 +1,261 @@
+[
+{
+    "fields": {
+        "parish": "Westmoreland",
+        "line2": "Savanna la Mar",
+        "line1": "20 Rose Street"
+    },
+    "model": "grades.address",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Savanna la Mar Primary School",
+        "address": 1
+    },
+    "model": "grades.school",
+    "pk": 1
+},
+{
+    "fields": {
+        "username": "bob",
+        "first_name": "Bob",
+        "last_name": "Slarby",
+        "is_active": true,
+        "school": 1,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2015-01-07T04:32:02Z",
+        "groups": [
+            1
+        ],
+        "address": null,
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$tXtWuRub5mvL$L8AGEDHsaCuc8ePc9WPc0VOVMRI3H34R1rTEzrPsw3E=",
+        "email": "bob@blah.com",
+        "date_joined": "2015-01-07T04:32:02Z"
+    },
+    "model": "grades.person",
+    "pk": 1
+},
+{
+    "fields": {
+        "username": "Jane",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "is_active": true,
+        "school": 1,
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2015-01-07T04:39:05Z",
+        "groups": [
+            2
+        ],
+        "address": null,
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$v1YGn1rRScjc$zZ4yvZSeraM/H57Or2ZQZLVu3QkgbLN5LPR/bED+7DM=",
+        "email": "jane@mannings.com",
+        "date_joined": "2015-01-07T04:39:05Z"
+    },
+    "model": "grades.person",
+    "pk": 2
+},
+{
+    "fields": {
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "school": null,
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2015-01-11T19:59:51.472Z",
+        "groups": [],
+        "address": null,
+        "user_permissions": [],
+        "password": "pbkdf2_sha256$12000$zE8GvpfbV0yS$LZVSFYzW9+NhKzbR8ew0MGfYxG3LzGdxmXbuVYQtFCQ=",
+        "email": "jeanrick@gmail.com",
+        "date_joined": "2015-01-07T04:42:50.704Z"
+    },
+    "model": "grades.person",
+    "pk": 3
+},
+{
+    "fields": {
+        "students": [
+            2
+        ],
+        "shift": null,
+        "school": 1,
+        "name": "5 x1",
+        "teacher": 1
+    },
+    "model": "grades.class",
+    "pk": 1
+},
+{
+    "fields": {
+        "term": 1,
+        "name": "Mathematics",
+        "level": 5,
+        "year": 2015,
+        "passing_percentage": 60,
+        "teacher": null
+    },
+    "model": "grades.subject",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Homework",
+        "description": ""
+    },
+    "model": "grades.assessmenttype",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "Classwork",
+        "description": ""
+    },
+    "model": "grades.assessmenttype",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "Project",
+        "description": ""
+    },
+    "model": "grades.assessmenttype",
+    "pk": 3
+},
+{
+    "fields": {
+        "name": "Test",
+        "description": ""
+    },
+    "model": "grades.assessmenttype",
+    "pk": 4
+},
+{
+    "fields": {
+        "assessment_type": 1,
+        "required": false,
+        "passing_percentage": null,
+        "weight": 20,
+        "subject": 1
+    },
+    "model": "grades.studentassessmenttypeweight",
+    "pk": 1
+},
+{
+    "fields": {
+        "assessment_type": 3,
+        "required": true,
+        "passing_percentage": 60,
+        "weight": 20,
+        "subject": 1
+    },
+    "model": "grades.studentassessmenttypeweight",
+    "pk": 2
+},
+{
+    "fields": {
+        "assessment_type": 4,
+        "required": true,
+        "passing_percentage": 60,
+        "weight": 60,
+        "subject": 1
+    },
+    "model": "grades.studentassessmenttypeweight",
+    "pk": 3
+},
+{
+    "fields": {
+        "score": 16,
+        "assigned_by": 1,
+        "participation_status": "Present",
+        "assigned_at": "2015-01-12T05:32:03Z",
+        "student": 2,
+        "assessment": 1
+    },
+    "model": "grades.studentgrade",
+    "pk": 1
+},
+{
+    "fields": {
+        "score": 21,
+        "assigned_by": 1,
+        "participation_status": "Present",
+        "assigned_at": "2015-01-12T06:25:54Z",
+        "student": 2,
+        "assessment": 2
+    },
+    "model": "grades.studentgrade",
+    "pk": 2
+},
+{
+    "fields": {
+        "score": 89,
+        "assigned_by": 1,
+        "participation_status": "Present",
+        "assigned_at": "2015-01-12T06:26:58Z",
+        "student": 2,
+        "assessment": 3
+    },
+    "model": "grades.studentgrade",
+    "pk": 3
+},
+{
+    "fields": {
+        "score": 78,
+        "assigned_by": 1,
+        "participation_status": "Present",
+        "assigned_at": "2015-01-12T06:27:27Z",
+        "student": 2,
+        "assessment": 4
+    },
+    "model": "grades.studentgrade",
+    "pk": 4
+},
+{
+    "fields": {
+        "assessment_type": 1,
+        "time_given": "2015-01-12T05:29:53Z",
+        "max_score": 20,
+        "subject": 1
+    },
+    "model": "grades.studentassessment",
+    "pk": 1
+},
+{
+    "fields": {
+        "assessment_type": 1,
+        "time_given": "2015-01-12T06:25:09Z",
+        "max_score": 25,
+        "subject": 1
+    },
+    "model": "grades.studentassessment",
+    "pk": 2
+},
+{
+    "fields": {
+        "assessment_type": 3,
+        "time_given": "2015-01-12T06:26:14Z",
+        "max_score": 100,
+        "subject": 1
+    },
+    "model": "grades.studentassessment",
+    "pk": 3
+},
+{
+    "fields": {
+        "assessment_type": 4,
+        "time_given": "2015-01-12T06:26:27Z",
+        "max_score": 100,
+        "subject": 1
+    },
+    "model": "grades.studentassessment",
+    "pk": 4
+}
+]

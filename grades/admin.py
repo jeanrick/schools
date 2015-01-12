@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from grades.models import Person, Address, School, Class, Subject, StudentGrade, StudentAssessment
+from grades.models import Person, Address, School, Class, Subject, StudentGrade, AssessmentType, StudentAssessment, StudentAssessmentTypeWeight
 
 
 class SchoolAdmin(admin.ModelAdmin):
@@ -15,3 +15,5 @@ admin.site.register(Class)
 admin.site.register(Subject)
 admin.site.register(StudentGrade)
 admin.site.register(StudentAssessment)
+admin.site.register(StudentAssessmentTypeWeight)
+admin.site.register(AssessmentType)

@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title>Report Sheet - {{ current_date }}</title>
+</head>
+<body>
+    <div id="div-main-contents">
+        <p>Hello world, from emmet!!!</p>
+        <div class="grades">
+            {% for grade in grades %}
+            <p>{{ grade }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
